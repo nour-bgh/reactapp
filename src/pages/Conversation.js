@@ -22,7 +22,7 @@ export default function Conversation() {
 
   useEffect(() => {
     markConversationRead(otherId);
-  }, [otherId]);
+  }, [otherId, markConversationRead]);
 
   if (!other) {
     return (

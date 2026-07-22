@@ -81,9 +81,11 @@ export function MessagesProvider({ children }) {
     return messages.filter(message => message.receiverId === user.id && !message.read).length;
   }, [messages, user]);
 
+  //changes:
+
   const value = useMemo(
     () => ({ sendMessage, getMessagesWith, getConversations, markConversationRead, unreadTotal }),
-    [messages, user, unreadTotal]
+    [messages, user, unreadTotal,sendMessage,getMessagesWith,getConversations,markConversationRead,]
   );
 
   return <MessagesContext.Provider value={value}>{children}</MessagesContext.Provider>;
