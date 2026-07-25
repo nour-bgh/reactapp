@@ -53,7 +53,7 @@ export function FavoritesProvider({ children }) {
   //changes:
 
   const value = useMemo(
-    () => ({ favorites: data.favorites, saved: data.saved, toggleFavorite, toggleSaved, isFavorite, isSaved }), [data, toggleFavorite, toggleSaved, isFavorite, isSaved]
+    () => ({ favorites: data.favorites, saved: data.saved, toggleFavorite, toggleSaved, isFavorite, isSaved }), [data]
   );
 
   return <FavoritesContext.Provider value={value}>{children}</FavoritesContext.Provider>;

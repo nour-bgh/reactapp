@@ -85,7 +85,7 @@ export function MessagesProvider({ children }) {
 
   const value = useMemo(
     () => ({ sendMessage, getMessagesWith, getConversations, markConversationRead, unreadTotal }),
-    [messages, user, unreadTotal,sendMessage,getMessagesWith,getConversations,markConversationRead,]
+    [messages, user, unreadTotal ]
   );
 
   return <MessagesContext.Provider value={value}>{children}</MessagesContext.Provider>;
