@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { Navigate, useLocation, useParams, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useFavorites } from '../context/FavoritesContext';
+import { useReservations } from '../context/ReservationsContext';
 import { listings } from '../data/listings';
 import { users } from '../data/users';
 import { formatPrice } from '../utils/formatters';
@@ -22,6 +23,7 @@ export default function ListingDetail() {
   const location = useLocation();
   const { user } = useAuth();
   const { isFavorite, toggleFavorite, isSaved, toggleSaved } = useFavorites();
+  const { createReservation, hasActiveReservation } = useReservations();
   const listing = useMemo(() => listings.find(item => item.id === id), [id]);
   const owner = useMemo(() => users.find(item => item.id === listing?.ownerId), [listing]);
   const ownerListings = useMemo(() => listings.filter(item => item.ownerId === owner?.id), [owner]);
@@ -41,6 +43,13 @@ export default function ListingDetail() {
 
   const favorited = isFavorite(listing.id);
   const savedListing = isSaved(listing.id);
+  const isAvailable = (listing.status || 'Disponible') === 'Disponible';
+  const alreadyRequested = user.role === 'student' && hasActiveReservation(listing.id);
+
+  const handleReserve = () => {
+    if (!isAvailable || alreadyRequested) return;
+    createReservation(listing);
+  };
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
@@ -133,7 +142,23 @@ export default function ListingDetail() {
               <p><span className="font-semibold text-slate-950">Note :</span> {listing.rating} / 5</p>
               <p><span className="font-semibold text-slate-950">Publié le :</span> {formatDate(listing.createdAt)}</p>
             </div>
-            <Link to="/logements" className="mt-8 inline-flex w-full items-center justify-center rounded-full bg-amber-400 px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-amber-300">Retour aux annonces</Link>
+
+            {user.role === 'student' && (
+              <button
+                type="button"
+                onClick={handleReserve}
+                disabled={!isAvailable || alreadyRequested}
+                className={`mt-6 inline-flex w-full items-center justify-center rounded-full px-5 py-3 text-sm font-semibold transition ${
+                  !isAvailable || alreadyRequested
+                    ? 'cursor-not-allowed bg-slate-200 text-slate-400'
+                    : 'bg-emerald-500 text-white hover:bg-emerald-600'
+                }`}
+              >
+                {!isAvailable ? 'Non disponible' : alreadyRequested ? 'Demande déjà envoyée' : 'Réserver'}
+              </button>
+            )}
+
+            <Link to="/logements" className="mt-4 inline-flex w-full items-center justify-center rounded-full bg-amber-400 px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-amber-300">Retour aux annonces</Link>
           </div>
           <div className="rounded-[2rem] border border-slate-200 bg-white p-8 shadow-2xl shadow-slate-300/10">
             <h2 className="text-xl font-semibold text-slate-950">Contact</h2>

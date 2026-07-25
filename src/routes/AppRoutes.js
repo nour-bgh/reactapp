@@ -14,6 +14,7 @@ import Favorites from '../pages/Favorites';
 import SavedListings from '../pages/SavedListings';
 import Messages from '../pages/Messages';
 import Conversation from '../pages/Conversation';
+import Notifications from '../pages/Notifications';
 import AdminDashboard from '../pages/AdminDashboard';
 import AdminUsers from '../pages/AdminUsers';
 import AdminListings from '../pages/AdminListings';
@@ -39,6 +40,7 @@ export default function AppRoutes() {
         <Route path="enregistres" element={<ProtectedRoute allowedRoles={['student', 'owner']}><SavedListings /></ProtectedRoute>} />
         <Route path="messages" element={<ProtectedRoute allowedRoles={['student', 'owner']}><Messages /></ProtectedRoute>} />
         <Route path="messages/:userId" element={<ProtectedRoute allowedRoles={['student', 'owner']}><Conversation /></ProtectedRoute>} />
+        <Route path="notifications" element={<ProtectedRoute allowedRoles={['student', 'owner']}><Notifications /></ProtectedRoute>} />
         <Route path="a-propos" element={<About />} />
       </Route>
       <Route path="admin" element={<ProtectedRoute allowedRoles={['admin']}><AdminLayout /></ProtectedRoute>}>

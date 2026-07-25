@@ -7,6 +7,7 @@ import { AuthProvider } from './context/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
 import { FavoritesProvider } from './context/FavoritesContext';
 import { MessagesProvider } from './context/MessagesContext';
+import { ReservationsProvider } from './context/ReservationsContext';
 import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -22,7 +23,9 @@ root.render(
           <AuthProvider>
             <FavoritesProvider>
               <MessagesProvider>
-                <App />
+                <ReservationsProvider>
+                  <App />
+                </ReservationsProvider>
               </MessagesProvider>
             </FavoritesProvider>
           </AuthProvider>
