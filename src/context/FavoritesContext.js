@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import { createContext, useContext, useEffect, useMemo, useState, useCallback } from 'react';
 import { useAuth } from './AuthContext';
 
 const FavoritesContext = createContext(null);
@@ -47,13 +47,26 @@ export function FavoritesProvider({ children }) {
     }));
   };
 
-  const isFavorite = (listingId) => data.favorites.includes(listingId);
-  const isSaved = (listingId) => data.saved.includes(listingId);
+  const isFavorite = useCallback(
+    (listingId) => data.favorites.includes(listingId),
+    [data.favorites]
+  );
 
-  //changes:
+  const isSaved = useCallback(
+    (listingId) => data.saved.includes(listingId),
+    [data.saved]
+  );
 
   const value = useMemo(
-    () => ({ favorites: data.favorites, saved: data.saved, toggleFavorite, toggleSaved, isFavorite, isSaved }), [data]
+    () => ({
+      favorites: data.favorites,
+      saved: data.saved,
+      toggleFavorite,
+      toggleSaved,
+      isFavorite,
+      isSaved,
+    }),
+    [data, isFavorite, isSaved]
   );
 
   return <FavoritesContext.Provider value={value}>{children}</FavoritesContext.Provider>;

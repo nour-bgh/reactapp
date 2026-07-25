@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import { createContext, useContext, useEffect, useMemo, useState, useCallback } from 'react';
 import { useAuth } from './AuthContext';
 
 const MessagesContext = createContext(null);
@@ -24,7 +24,7 @@ export function MessagesProvider({ children }) {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
   }, [messages]);
 
-  const sendMessage = (receiverId, content) => {
+  const sendMessage = useCallback((receiverId, content) => {
     if (!user || !content.trim()) return;
     const newMessage = {
       id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
@@ -36,17 +36,17 @@ export function MessagesProvider({ children }) {
       read: false,
     };
     setMessages(current => [...current, newMessage]);
-  };
+  }, [user]);
 
-  const getMessagesWith = otherUserId => {
+  const getMessagesWith = useCallback((otherUserId) => {
     if (!user) return [];
     const cid = conversationId(user.id, otherUserId);
     return messages
       .filter(message => message.conversationId === cid)
       .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
-  };
+  }, [user, messages]);
 
-  const markConversationRead = otherUserId => {
+  const markConversationRead = useCallback((otherUserId) => {
     if (!user) return;
     const cid = conversationId(user.id, otherUserId);
     setMessages(current =>
@@ -56,9 +56,9 @@ export function MessagesProvider({ children }) {
           : message
       )
     );
-  };
+  }, [user]);
 
-  const getConversations = () => {
+  const getConversations = useCallback(() => {
     if (!user) return [];
     const otherUserIds = new Set();
     messages.forEach(message => {
@@ -74,18 +74,16 @@ export function MessagesProvider({ children }) {
         return { otherId, lastMessage, unread };
       })
       .sort((a, b) => new Date(b.lastMessage?.createdAt || 0) - new Date(a.lastMessage?.createdAt || 0));
-  };
+  }, [user, messages, getMessagesWith]);
 
   const unreadTotal = useMemo(() => {
     if (!user) return 0;
     return messages.filter(message => message.receiverId === user.id && !message.read).length;
   }, [messages, user]);
 
-  //changes:
-
   const value = useMemo(
     () => ({ sendMessage, getMessagesWith, getConversations, markConversationRead, unreadTotal }),
-    [messages, user, unreadTotal ]
+    [sendMessage, getMessagesWith, getConversations, markConversationRead, unreadTotal]
   );
 
   return <MessagesContext.Provider value={value}>{children}</MessagesContext.Provider>;

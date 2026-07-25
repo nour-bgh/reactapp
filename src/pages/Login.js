@@ -3,11 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import AnimatedCharacters from '../components/AnimatedCharacters';
 
-const demoAccounts = [
-  { role: 'Admin', email: 'admin@dariuni.tn', password: 'Admin123!' },
-  { role: 'Étudiant', email: 'etudiant@dariuni.tn', password: 'Etudiant123!' },
-  { role: 'Propriétaire', email: 'proprietaire@dariuni.tn', password: 'Proprietaire123!' },
-];
+
 
 const adminCredentials = ['admin@dariuni.tn'];
 
@@ -47,10 +43,7 @@ export default function Login() {
     }
   };
 
-  const handleDemoLogin = (email, password) => {
-    setForm({ email, password });
-    login({ email, password });
-  };
+  
 
   return (
     <div className="grid min-h-[calc(100vh-72px)] lg:grid-cols-2">
