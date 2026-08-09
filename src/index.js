@@ -8,6 +8,7 @@ import { ThemeProvider } from './context/ThemeContext';
 import { FavoritesProvider } from './context/FavoritesContext';
 import { MessagesProvider } from './context/MessagesContext';
 import { ReservationsProvider } from './context/ReservationsContext';
+import { LanguageProvider } from './context/LanguageContext';
 import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -20,15 +21,17 @@ root.render(
         }}
       >
         <ThemeProvider>
-          <AuthProvider>
-            <FavoritesProvider>
-              <MessagesProvider>
-                <ReservationsProvider>
-                  <App />
-                </ReservationsProvider>
-              </MessagesProvider>
-            </FavoritesProvider>
-          </AuthProvider>
+          <LanguageProvider>
+            <AuthProvider>
+              <FavoritesProvider>
+                <MessagesProvider>
+                  <ReservationsProvider>
+                    <App />
+                  </ReservationsProvider>
+                </MessagesProvider>
+              </FavoritesProvider>
+            </AuthProvider>
+          </LanguageProvider>
         </ThemeProvider>
       </BrowserRouter>
   </React.StrictMode>

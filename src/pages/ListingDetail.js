@@ -6,6 +6,7 @@ import { useReservations } from '../context/ReservationsContext';
 import { listings } from '../data/listings';
 import { users } from '../data/users';
 import { formatPrice } from '../utils/formatters';
+import { useTranslation } from '../i18n/useTranslation';
 
 function getInitials(firstName = '', lastName = '') {
   const first = firstName?.trim()?.[0] || '';
@@ -19,6 +20,7 @@ function formatDate(dateString) {
 }
 
 export default function ListingDetail() {
+  const { t } = useTranslation();
   const { id } = useParams();
   const location = useLocation();
   const { user } = useAuth();
@@ -35,8 +37,8 @@ export default function ListingDetail() {
   if (!listing) {
     return (
       <div className="mx-auto max-w-4xl px-4 py-24 text-center sm:px-6">
-        <p className="text-lg text-slate-600">Annonce introuvable.</p>
-        <Link to="/logements" className="mt-6 inline-block rounded-full bg-amber-400 px-6 py-3 text-sm font-semibold text-slate-950">Retour aux logements</Link>
+        <p className="text-lg text-slate-600">{t.listing.unavailable}</p>
+        <Link to="/logements" className="mt-6 inline-block rounded-full bg-amber-400 px-6 py-3 text-sm font-semibold text-slate-950">{t.listing.returnToListings}</Link>
       </div>
     );
   }

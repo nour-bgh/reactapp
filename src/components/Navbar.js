@@ -5,6 +5,17 @@ import { useFavorites } from '../context/FavoritesContext';
 import { useMessages } from '../context/MessagesContext';
 import { useReservations } from '../context/ReservationsContext';
 import ThemeToggle from './ThemeToggle';
+import LanguageSelector from './LanguageSelector';
+import { useTranslation } from '../i18n/useTranslation';
+
+const navItems = [
+  { path: '/', labelKey: 'home', public: true },
+  { path: '/logements', labelKey: 'listings', public: true },
+  { path: '/compatibilite', labelKey: 'compatibility', roles: ['student'] },
+  { path: '/mes-annonces', labelKey: 'profile', roles: ['owner'] },
+  { path: '/a-propos', labelKey: 'about', public: true },
+  { path: '/admin', labelKey: 'admin', roles: ['admin'] },
+];
 
 function getInitials(firstName = '', lastName = '') {
   const first = firstName?.trim()?.[0] || '';
@@ -27,16 +38,8 @@ function Avatar({ user, className = '' }) {
   );
 }
 
-const navItems = [
-  { path: '/', label: 'Accueil', public: true },
-  { path: '/logements', label: 'Logements', public: true },
-  { path: '/compatibilite', label: 'Compatibilité', roles: ['student'] },
-  { path: '/mes-annonces', label: 'Mes annonces', roles: ['owner'] },
-  { path: '/a-propos', label: 'À propos', public: true },
-  { path: '/admin', label: 'Admin Dashboard', roles: ['admin'] },
-];
-
 export default function Navbar() {
+  const { t } = useTranslation();
   const { user, logout } = useAuth();
   const { favorites, saved } = useFavorites();
   const { unreadTotal } = useMessages();
@@ -57,7 +60,7 @@ export default function Navbar() {
             if (!allowed) return null;
             return (
               <NavLink key={item.path} to={item.path} className={({ isActive }) => isActive ? 'text-amber-300 font-semibold' : 'text-slate-700 hover:text-slate-950'}>
-                {item.label}
+                {t.navbar[item.labelKey] || item.labelKey}
               </NavLink>
             );
           })}
@@ -101,11 +104,12 @@ export default function Navbar() {
               </Link>
             </>
           )}
+          <LanguageSelector />
           <ThemeToggle />
           {!user ? (
             <>
-              <Link to="/login" className="hidden rounded-full bg-amber-400 px-4 py-2 text-sm font-semibold text-slate-950 shadow-sm transition hover:bg-amber-300 sm:inline-block">Connexion</Link>
-              <Link to="/register" className="hidden rounded-full border border-amber-400 px-4 py-2 text-sm text-slate-950 transition hover:border-amber-300 hover:text-amber-200 sm:inline-block">Inscription</Link>
+              <Link to="/login" className="hidden rounded-full bg-amber-400 px-4 py-2 text-sm font-semibold text-slate-950 shadow-sm transition hover:bg-amber-300 sm:inline-block">{t.navbar.login}</Link>
+              <Link to="/register" className="hidden rounded-full border border-amber-400 px-4 py-2 text-sm text-slate-950 transition hover:border-amber-300 hover:text-amber-200 sm:inline-block">{t.navbar.register}</Link>
             </>
           ) : (
             <>
@@ -113,7 +117,7 @@ export default function Navbar() {
                 <Avatar user={user} />
                 <span className="hidden sm:inline text-sm text-slate-700 hover:underline dark:text-slate-200">{user.firstName} {user.lastName}</span>
               </Link>
-              <button onClick={logout} className="hidden rounded-full bg-slate-100 px-4 py-2 text-sm text-slate-950 transition hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700 sm:inline-block">Déconnexion</button>
+              <button onClick={logout} className="hidden rounded-full bg-slate-100 px-4 py-2 text-sm text-slate-950 transition hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700 sm:inline-block">{t.navbar.logout}</button>
             </>
           )}
 
@@ -151,7 +155,7 @@ export default function Navbar() {
                   onClick={closeMenu}
                   className={({ isActive }) => isActive ? 'text-amber-300 font-semibold' : 'text-slate-700 dark:text-slate-200'}
                 >
-                  {item.label}
+                  {t.navbar[item.labelKey] || item.labelKey}
                 </NavLink>
               );
             })}
@@ -160,8 +164,8 @@ export default function Navbar() {
           <div className="mt-4 flex flex-col gap-3 border-t border-slate-200 pt-4 dark:border-slate-800">
             {!user ? (
               <>
-                <Link to="/login" onClick={closeMenu} className="rounded-full bg-amber-400 px-4 py-2 text-center text-sm font-semibold text-slate-950 shadow-sm transition hover:bg-amber-300">Connexion</Link>
-                <Link to="/register" onClick={closeMenu} className="rounded-full border border-amber-400 px-4 py-2 text-center text-sm text-slate-950 transition hover:border-amber-300 hover:text-amber-200">Inscription</Link>
+                <Link to="/login" onClick={closeMenu} className="rounded-full bg-amber-400 px-4 py-2 text-center text-sm font-semibold text-slate-950 shadow-sm transition hover:bg-amber-300">{t.navbar.login}</Link>
+                <Link to="/register" onClick={closeMenu} className="rounded-full border border-amber-400 px-4 py-2 text-center text-sm text-slate-950 transition hover:border-amber-300 hover:text-amber-200">{t.navbar.register}</Link>
               </>
             ) : (
               <>
@@ -173,7 +177,7 @@ export default function Navbar() {
                   onClick={() => { closeMenu(); logout(); }}
                   className="rounded-full bg-slate-100 px-4 py-2 text-sm text-slate-950 transition hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700"
                 >
-                  Déconnexion
+                  {t.navbar.logout}
                 </button>
               </>
             )}

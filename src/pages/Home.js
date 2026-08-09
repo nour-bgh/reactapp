@@ -5,6 +5,7 @@ import heroBg from '../assests/hero-bg.jpg';
 import testimonialsVideo from '../assests/testimonials-bg.mp4';
 import { listings } from '../data/listings';
 import { formatPrice } from '../utils/formatters';
+import { useTranslation } from '../i18n/useTranslation';
 
 const stats = [
   { value: `${listings.length}+`, label: 'Logements disponibles' },
@@ -103,6 +104,7 @@ function StarRating({ rating }) {
 }
 
 export default function Home() {
+  const { t } = useTranslation();
   const featuredListings = [...listings].slice(-3).reverse();
 
   return (
@@ -120,11 +122,11 @@ export default function Home() {
         <div className="relative mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
           <div className="grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
             <div className="space-y-6 text-center lg:text-left">
-              <span className="inline-flex rounded-full bg-amber-300/20 px-4 py-1 text-sm font-semibold text-amber-200 ring-1 ring-amber-200/20">DariUni — Colocation & logement étudiant</span>
-              <h1 className="text-4xl font-bold tracking-tight text-white sm:text-5xl">Trouvez votre coloc idéale ou publiez vos annonces en toute simplicité.</h1>
-              <p className="mx-auto max-w-2xl text-lg leading-8 text-slate-300 lg:mx-0">Découvrez un espace pensé pour les étudiants et propriétaires qui veulent gérer les logements, les profils et les demandes sans stress.</p>
+              <span className="inline-flex rounded-full bg-amber-300/20 px-4 py-1 text-sm font-semibold text-amber-200 ring-1 ring-amber-200/20">{t.home.heroBadge}</span>
+              <h1 className="text-4xl font-bold tracking-tight text-white sm:text-5xl">{t.home.heroTitle}</h1>
+              <p className="mx-auto max-w-2xl text-lg leading-8 text-slate-300 lg:mx-0">{t.home.heroDescription}</p>
               <div className="flex flex-col gap-4 sm:flex-row sm:justify-center lg:justify-start">
-                <Link to="/logements" className="rounded-full bg-amber-400 px-6 py-3 text-sm font-semibold text-slate-950 shadow-lg shadow-amber-500/20 transition hover:bg-amber-300">Explorer les logements</Link>
+                <Link to="/logements" className="rounded-full bg-amber-400 px-6 py-3 text-sm font-semibold text-slate-950 shadow-lg shadow-amber-500/20 transition hover:bg-amber-300">{t.home.exploreListings}</Link>
               </div>
             </div>
             <div className="hidden lg:block" aria-hidden="true" />
@@ -151,10 +153,10 @@ export default function Home() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.24em] text-amber-500">À la une</p>
-              <h2 className="mt-2 text-3xl font-bold text-slate-950 dark:text-slate-100">Logements les plus récents</h2>
+              <p className="text-sm font-semibold uppercase tracking-[0.24em] text-amber-500">{t.home.featuredLabel}</p>
+              <h2 className="mt-2 text-3xl font-bold text-slate-950 dark:text-slate-100">{t.home.featuredTitle}</h2>
             </div>
-            <Link to="/logements" className="text-sm font-semibold text-amber-500 hover:text-amber-600">Voir toutes les annonces →</Link>
+            <Link to="/logements" className="text-sm font-semibold text-amber-500 hover:text-amber-600">{t.home.viewAllListings}</Link>
           </div>
           <div className="mt-10 grid gap-6 md:grid-cols-3">
             {featuredListings.map(listing => (
@@ -208,8 +210,8 @@ export default function Home() {
 
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-amber-500">Témoignages</p>
-            <h2 className="mt-2 text-3xl font-bold text-slate-950 dark:text-slate-100">Ce que dit notre communauté</h2>
+            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-amber-500">{t.home.testimonials}</p>
+            <h2 className="mt-2 text-3xl font-bold text-slate-950 dark:text-slate-100">{t.home.communityTitle}</h2>
           </div>
           <div className="mt-10 grid gap-6 md:grid-cols-3">
             {testimonials.map(item => (
@@ -229,10 +231,10 @@ export default function Home() {
         <div className="pointer-events-none absolute left-1/4 top-0 h-64 w-64 rounded-full bg-amber-400/10 blur-3xl" />
         <div className="pointer-events-none absolute bottom-0 right-1/4 h-64 w-64 rounded-full bg-sky-400/10 blur-3xl" />
         <div className="relative mx-auto max-w-3xl px-4 text-center sm:px-6">
-          <h2 className="text-3xl font-bold text-white sm:text-4xl">Prêt à trouver votre coloc idéale ?</h2>
-          <p className="mt-4 text-slate-300">Rejoignez DariUni gratuitement et commencez votre recherche dès aujourd'hui.</p>
+          <h2 className="text-3xl font-bold text-white sm:text-4xl">{t.home.finalCtaTitle}</h2>
+          <p className="mt-4 text-slate-300">{t.home.finalCtaText}</p>
           <div className="mt-8 flex justify-center">
-            <Link to="/register" className="rounded-full bg-amber-400 px-6 py-3 text-sm font-semibold text-slate-950 shadow-lg shadow-amber-500/20 transition hover:bg-amber-300">Créer un compte</Link>
+            <Link to="/register" className="rounded-full bg-amber-400 px-6 py-3 text-sm font-semibold text-slate-950 shadow-lg shadow-amber-500/20 transition hover:bg-amber-300">{t.home.createAccount}</Link>
           </div>
         </div>
       </section>

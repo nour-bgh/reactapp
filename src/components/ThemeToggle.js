@@ -1,13 +1,15 @@
 import { useTheme } from '../context/ThemeContext';
+import { useTranslation } from '../i18n/useTranslation';
 
 export default function ThemeToggle() {
   const { theme, toggleTheme } = useTheme();
+  const { t } = useTranslation();
 
   return (
     <button
       onClick={toggleTheme}
       type="button"
-      aria-label={theme === 'dark' ? 'Activer le mode clair' : 'Activer le mode sombre'}
+      aria-label={theme === 'dark' ? t.theme.activateLight : t.theme.activateDark}
       className="flex h-10 w-10 items-center justify-center rounded-full border border-slate-300 bg-slate-100 text-slate-950 shadow-sm transition hover:bg-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700"
     >
       {theme === 'dark' ? (

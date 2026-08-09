@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import AnimatedCharacters from '../components/AnimatedCharacters';
+import { useTranslation } from '../i18n/useTranslation';
 
 
 
@@ -9,6 +10,7 @@ const adminCredentials = ['admin@dariuni.tn'];
 
 export default function Login() {
   const { login, user, message, setMessage } = useAuth();
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || location.state?.from?.search ? `${location.state?.from?.pathname}${location.state?.from?.search || ''}` : '/';
@@ -62,8 +64,8 @@ export default function Login() {
       <div className="flex items-center justify-center px-4 py-16 sm:px-6">
         <div className="w-full max-w-md">
           <div className="overflow-hidden rounded-3xl bg-white p-8 shadow-2xl shadow-slate-300/10">
-            <h2 className="text-3xl font-extrabold text-slate-950">Connexion</h2>
-            <p className="mt-2 text-slate-500">Accédez à votre espace étudiant ou propriétaire.</p>
+            <h2 className="text-3xl font-extrabold text-slate-950">{t.auth.loginTitle}</h2>
+            <p className="mt-2 text-slate-500">{t.auth.loginSubtitle}</p>
             {message && (
               <div className={`mt-6 rounded-2xl px-4 py-3 text-sm ${message.type === 'error' ? 'bg-red-500/10 text-red-200' : 'bg-emerald-500/10 text-emerald-200'}`}>
                 {message.text}
@@ -71,11 +73,11 @@ export default function Login() {
             )}
             <form onSubmit={handleSubmit} className="mt-8 space-y-6">
               <label className="block text-sm font-medium text-slate-700">
-                Email
+                {t.auth.email}
                 <input type="email" required value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} className="mt-2 w-full rounded-2xl border border-slate-300 bg-slate-50 px-4 py-3 text-slate-950 outline-none ring-1 ring-transparent transition focus:border-amber-300 focus:ring-amber-300/40" />
               </label>
               <label className="block text-sm font-medium text-slate-700">
-                Mot de passe
+                {t.auth.password}
                 <div className="relative mt-2">
                   <input
                     type={showPassword ? 'text' : 'password'}
@@ -87,7 +89,7 @@ export default function Login() {
                   <button
                     type="button"
                     onClick={() => setShowPassword(current => !current)}
-                    aria-label={showPassword ? 'Masquer le mot de passe' : 'Afficher le mot de passe'}
+                    aria-label={showPassword ? t.auth.hidePassword : t.auth.showPassword}
                     className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 transition hover:text-slate-600"
                   >
                     {showPassword ? (
@@ -105,11 +107,11 @@ export default function Login() {
                   </button>
                 </div>
               </label>
-              <button type="submit" className="w-full rounded-2xl bg-amber-400 px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-amber-300">Se connecter</button>
+              <button type="submit" className="w-full rounded-2xl bg-amber-400 px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-amber-300">{t.auth.loginTitle}</button>
             </form>
             <p className="mt-6 text-center text-sm text-slate-500">
-              Pas encore de compte ?{' '}
-              <Link to="/register" state={{ redirectTo }} className="font-semibold text-amber-500 hover:text-amber-400">Inscrivez-vous</Link>
+              {t.auth.noAccount}{' '}
+              <Link to="/register" state={{ redirectTo }} className="font-semibold text-amber-500 hover:text-amber-400">{t.auth.signUpLink}</Link>
             </p>
           </div>
         </div>
