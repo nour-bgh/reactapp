@@ -31,7 +31,7 @@ export default function Login() {
     return () => setMessage(null);
   }, [setMessage]);
 
-  const handleSubmit = event => {
+  const handleSubmit = async event => {
     event.preventDefault();
 
     if (form.email && adminCredentials.includes(form.email.toLowerCase()) && form.password !== 'Admin123!') {
@@ -39,7 +39,7 @@ export default function Login() {
       return;
     }
 
-    const success = login(form);
+    const success = await login(form);
     if (success) {
       navigate(redirectTo, { replace: true });
     }

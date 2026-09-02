@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
-import { users as mockUsers } from '../data/users';
+import { loginUser, createUser } from '../assests/services/api.service.user';
 
 const AuthContext = createContext(null);
 
@@ -20,28 +20,39 @@ export function AuthProvider({ children }) {
     window.localStorage.setItem('dariuni_session', JSON.stringify(user));
   }, [user]);
 
-  const login = ({ email, password }) => {
-    const found = mockUsers.find(
-      u => u.email.toLowerCase() === email.toLowerCase() && u.password === password
-    );
-    if (!found) {
-      setMessage({ type: 'error', text: 'Identifiants invalides.' });
+  const login = async ({ email, password }) => {
+    try {
+      const response = await loginUser({ email, password });
+      const foundUser = response.data.data;
+
+      setUser(foundUser);
+      setMessage({ type: 'success', text: `Bienvenue ${foundUser.name} !` });
+      return true;
+    } catch (error) {
+      const errorMsg = error.response?.data?.message || 'Identifiants invalides.';
+      setMessage({ type: 'error', text: errorMsg });
       return false;
     }
-    setUser({ ...found, password: undefined });
-    setMessage({ type: 'success', text: `Bienvenue ${found.firstName} !` });
-    return true;
   };
 
-  const register = payload => {
+  const register = async payload => {
     if (payload?.role === 'admin') {
       setMessage({ type: 'error', text: "L'inscription d'un compte administrateur n'est pas autorisée. Utilisez les identifiants préconfigurés." });
       return false;
     }
 
-    setUser({ ...payload, id: Date.now(), role: payload.role, password: payload.password });
-    setMessage({ type: 'success', text: 'Inscription réussie, vous êtes connecté(e).' });
-    return true;
+    try {
+      const response = await createUser(payload);
+      const newUser = response.data.data;
+
+      setUser(newUser);
+      setMessage({ type: 'success', text: 'Inscription réussie, vous êtes connecté(e).' });
+      return true;
+    } catch (error) {
+      const errorMsg = error.response?.data?.message || "Erreur lors de l'inscription.";
+      setMessage({ type: 'error', text: errorMsg });
+      return false;
+    }
   };
 
   const logout = () => {

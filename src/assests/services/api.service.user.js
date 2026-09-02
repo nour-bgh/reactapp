@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = `${import.meta.env.VITE_API_URL}/users`;
+const API_URL = `${process.env.REACT_APP_API_URL}/users`;
 
 export async function getAllUsers() {
     return await axios.get(API_URL);
@@ -20,4 +20,7 @@ export async function updateUser(userId, userData) {
 
 export async function deleteUser(userId) {
     return await axios.delete(`${API_URL}/${userId}`);
+}
+export async function loginUser(credentials) {
+    return await axios.post(`${API_URL}/login`, credentials);
 }
